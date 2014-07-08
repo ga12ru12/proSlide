@@ -1854,6 +1854,7 @@
 
 })(sk, jQuery);
 
+alert(detectmob());
 
 function detectmob() {
     if( navigator.userAgent.match(/Android/i)
