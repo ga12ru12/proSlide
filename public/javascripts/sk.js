@@ -136,130 +136,130 @@
     })();
 
     sk.widgets.SectionScroll = (function() {
-        if(detectmob()){
-            function SectionScroll(element, options) {
+        function SectionScroll(element, options) {
+            if(detectmob()){
                 this.handleMouseup = __bind(this.handleMouseup, this);
                 this.handleMousemove = __bind(this.handleMousemove, this);
                 this.handleMousedown = __bind(this.handleMousedown, this);
                 this.handleTouch = __bind(this.handleTouch, this);
                 this.handleMousewheel = __bind(this.handleMousewheel, this);
-                this.$element = element.jquery ? element : $(element);
-                this.options = $.extend({
-                    minDelta: 50,
-                    scrollbarTimerDelay: 0,
-                    mousewheelTimerDelay: 200
-                }, options);
-                this.oldTop = 0;
-                this.top = 0;
-                this.delta = 0;
-                this.mousewheelTimer = false;
-                this.scrollbarTimer = false;
-                this.isLocked = false;
-                this.$doc = $(document);
             }
-
-            SectionScroll.prototype.init = function() {
-                var o;
-                if (!this.$element.length) {
-                    return this;
-                }
-                o = this.options;
-                this.$element.on('mousewheel scroll', this.handleMousewheel).on('mousedown', this.handleMousedown).on('touchstart touchmove', this.handleTouch);
-                return this;
-            };
-
-            SectionScroll.prototype.destroy = function() {
-                this.$element.off('mousewheel scroll', this.handleMousewheel).off('mousedown', this.handleMousedown).off('touchstart touchmove', this.handleTouch);
-                return this;
-            };
-
-            SectionScroll.prototype.handleMousewheel = function(event) {
-                var _this = this;
-                if (!this.isLocked) {
-                    this.top = this.$element.scrollTop();
-                    if (!this.scrollTimer) {
-                        this.delta = 0;
-                        this.oldTop = this.top;
-                    } else {
-                        this.scrollTimer = clearTimeout(this.scrollTimer);
-                    }
-                    this.delta = this.top - this.oldTop;
-                    if (Math.abs(this.delta) >= this.options.minDelta) {
-                        event.preventDefault();
-                        this.checkScroll();
-                        this.scrollTimer = clearTimeout(this.scrollTimer);
-                        return this.scrollTimer = false;
-                    } else {
-                        return this.scrollTimer = setTimeout(function() {
-                            _this.delta = _this.$element.scrollTop() - _this.oldTop;
-                            _this.checkScroll();
-                            return _this.scrollTimer = false;
-                        }, this.options.mousewheelTimerDelay);
-                    }
-                } else {
-                    return event.preventDefault();
-                }
-            };
-
-            SectionScroll.prototype.handleTouch = function(event) {
-                if (this.isLocked) {
-                    return event.preventDefault();
-                }
-            };
-
-            SectionScroll.prototype.handleMousedown = function(event) {
-                if (event.currentTarget === event.target) {
-                    this.oldTop = this.$element.scrollTop();
-                    return this.$doc.on('mousemove', this.handleMousemove).on('mouseup', this.handleMouseup);
-                }
-            };
-
-            SectionScroll.prototype.handleMousemove = function(event) {
-                var _this = this;
-                return this.scrollbarTimer = setTimeout(function() {
-                    _this.top = _this.$element.scrollTop();
-                    if (_this.oldTop !== _this.top) {
-                        _this.lock(true);
-                        return _this.$doc.off('mousemove', _this.handleMousemove);
-                    }
-                }, 0);
-            };
-
-            SectionScroll.prototype.handleMouseup = function(event) {
-                this.top = this.$element.scrollTop();
-                this.scrollbarTimer = clearTimeout(this.scrollbarTimer);
-                this.$doc.off('mousemove', this.handleMousemove);
-                this.$doc.off('mouseup', this.handleMouseup);
-                this.delta = this.top - this.oldTop;
-                this.lock(false);
-                return this.checkScroll();
-            };
-
-            SectionScroll.prototype.checkScroll = function() {
-                var e;
-                if (this.delta) {
-                    e = 'scrollcancel';
-                    if (Math.abs(this.delta) >= this.options.minDelta) {
-                        e = this.delta > 0 ? 'scrolldown' : 'scrollup';
-                    }
-                    return $(this).trigger(e, {
-                        scrollTop: this.top
-                    });
-                }
-            };
-
-            SectionScroll.prototype.lock = function(bool) {
-                if (bool != null) {
-                    this.isLocked = bool;
-                } else {
-                    this.isLocked = !this.isLocked;
-                }
-                return this;
-            };
-
-            return SectionScroll;
-
+            this.$element = element.jquery ? element : $(element);
+            this.options = $.extend({
+                minDelta: 50,
+                scrollbarTimerDelay: 0,
+                mousewheelTimerDelay: 200
+            }, options);
+            this.oldTop = 0;
+            this.top = 0;
+            this.delta = 0;
+            this.mousewheelTimer = false;
+            this.scrollbarTimer = false;
+            this.isLocked = false;
+            this.$doc = $(document);
         }
+
+        SectionScroll.prototype.init = function() {
+            var o;
+            if (!this.$element.length) {
+                return this;
+            }
+            o = this.options;
+            this.$element.on('mousewheel scroll', this.handleMousewheel).on('mousedown', this.handleMousedown).on('touchstart touchmove', this.handleTouch);
+            return this;
+        };
+
+        SectionScroll.prototype.destroy = function() {
+            this.$element.off('mousewheel scroll', this.handleMousewheel).off('mousedown', this.handleMousedown).off('touchstart touchmove', this.handleTouch);
+            return this;
+        };
+
+        SectionScroll.prototype.handleMousewheel = function(event) {
+            var _this = this;
+            if (!this.isLocked) {
+                this.top = this.$element.scrollTop();
+                if (!this.scrollTimer) {
+                    this.delta = 0;
+                    this.oldTop = this.top;
+                } else {
+                    this.scrollTimer = clearTimeout(this.scrollTimer);
+                }
+                this.delta = this.top - this.oldTop;
+                if (Math.abs(this.delta) >= this.options.minDelta) {
+                    event.preventDefault();
+                    this.checkScroll();
+                    this.scrollTimer = clearTimeout(this.scrollTimer);
+                    return this.scrollTimer = false;
+                } else {
+                    return this.scrollTimer = setTimeout(function() {
+                        _this.delta = _this.$element.scrollTop() - _this.oldTop;
+                        _this.checkScroll();
+                        return _this.scrollTimer = false;
+                    }, this.options.mousewheelTimerDelay);
+                }
+            } else {
+                return event.preventDefault();
+            }
+        };
+
+        SectionScroll.prototype.handleTouch = function(event) {
+            if (this.isLocked) {
+                return event.preventDefault();
+            }
+        };
+
+        SectionScroll.prototype.handleMousedown = function(event) {
+            if (event.currentTarget === event.target) {
+                this.oldTop = this.$element.scrollTop();
+                return this.$doc.on('mousemove', this.handleMousemove).on('mouseup', this.handleMouseup);
+            }
+        };
+
+        SectionScroll.prototype.handleMousemove = function(event) {
+            var _this = this;
+            return this.scrollbarTimer = setTimeout(function() {
+                _this.top = _this.$element.scrollTop();
+                if (_this.oldTop !== _this.top) {
+                    _this.lock(true);
+                    return _this.$doc.off('mousemove', _this.handleMousemove);
+                }
+            }, 0);
+        };
+
+        SectionScroll.prototype.handleMouseup = function(event) {
+            this.top = this.$element.scrollTop();
+            this.scrollbarTimer = clearTimeout(this.scrollbarTimer);
+            this.$doc.off('mousemove', this.handleMousemove);
+            this.$doc.off('mouseup', this.handleMouseup);
+            this.delta = this.top - this.oldTop;
+            this.lock(false);
+            return this.checkScroll();
+        };
+
+        SectionScroll.prototype.checkScroll = function() {
+            var e;
+            if (this.delta) {
+                e = 'scrollcancel';
+                if (Math.abs(this.delta) >= this.options.minDelta) {
+                    e = this.delta > 0 ? 'scrolldown' : 'scrollup';
+                }
+                return $(this).trigger(e, {
+                    scrollTop: this.top
+                });
+            }
+        };
+
+        SectionScroll.prototype.lock = function(bool) {
+            if (bool != null) {
+                this.isLocked = bool;
+            } else {
+                this.isLocked = !this.isLocked;
+            }
+            return this;
+        };
+
+        return SectionScroll;
+
     })();
 
 }).call(this);
@@ -1854,8 +1854,6 @@
 
 })(sk, jQuery);
 
-alert(detectmob());
-
 function detectmob() {
     if( navigator.userAgent.match(/Android/i)
         || navigator.userAgent.match(/webOS/i)
@@ -1871,4 +1869,3 @@ function detectmob() {
         return true;
     }
 }
-
